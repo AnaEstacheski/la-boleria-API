@@ -16,5 +16,48 @@ export async function insertOrder(req, res) {
         console.log(err);
         res.status(500).send(err.message);
     }
+}
 
+export async function getOrders(req, res) {
+    const { date } = req.query;
+
+    try {
+        const orders = await ordersRepository.getAllOrders(date)
+        if (orders.rowCount === 0) {
+            return res.status(404).send([]);
+        }
+        res.status(200).send(orders.rows.map(ordersObject));
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+}
+
+function ordersObject(row){
+    const [
+        id, createdAt, quantity, totalPrice, 
+        clientId, clientName, address,
+        phone, cakeId, cakeName,
+        price, description, image
+    ] = row;
+
+    return {
+        client: {
+            id: clientId,
+            name: clientName,
+            address: address,
+            phone: phone
+        },
+        cake: {
+            id: cakeId,
+            name: cakeName,
+            price: price,
+            description: description,
+            image: image
+        },
+        orderId: id,
+        createdAt,
+        quantity,
+        totalPrice
+    }
 }
