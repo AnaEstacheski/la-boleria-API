@@ -45,3 +45,27 @@ export async function getAllOrders(date) {
         rowMode: 'array'},
     );
 }
+
+export async function getOrderId(id) {
+    const orderId =  `WHERE orders.id=$1`;
+
+    return connectionDB.query(
+        {text: 
+            `SELECT 
+                orders.id, TO_CHAR("createdAt", 'YYYY-MM-DD'), quantity, "totalPrice",
+                clients.id as "clientId", 
+                clients.name AS "name",
+                clients.address AS "address",
+                clients.phone AS phone,
+                cakes.id AS "cakeId",
+                cakes.name AS name,
+                cakes.price AS price,
+                cakes.description AS description,
+                cakes.image AS image
+            FROM orders 
+            JOIN clients ON clients.id = orders."clientId"
+            JOIN cakes ON orders."cakeId" = cakes.id ${orderId}`,
+        rowMode: 'array'}, 
+        [id]
+    );
+}
