@@ -29,8 +29,8 @@ export async function getAllOrders(date) {
     return connectionDB.query(
         {text: 
             `SELECT 
-                orders.id, TO_CHAR("createdAt", 'YYYY-MM-DD'), quantity, "totalPrice",
-                clients.id as "clientId", 
+                orders.id, TO_CHAR("createdAt", 'YYYY-MM-DD HH:MM'), quantity, "totalPrice",
+                clients.id AS "clientId", 
                 clients.name AS "name",
                 clients.address AS "address",
                 clients.phone AS phone,
@@ -52,8 +52,8 @@ export async function getOrderId(id) {
     return connectionDB.query(
         {text: 
             `SELECT 
-                orders.id, TO_CHAR("createdAt", 'YYYY-MM-DD'), quantity, "totalPrice",
-                clients.id as "clientId", 
+                orders.id, TO_CHAR("createdAt", 'YYYY-MM-DD HH:MM'), quantity, "totalPrice",
+                clients.id AS "clientId", 
                 clients.name AS "name",
                 clients.address AS "address",
                 clients.phone AS phone,

@@ -13,3 +13,13 @@ export async function getClient(name) {
         [name]
     );
 }
+
+export async function getClientOrder(id) {
+    return connectionDB.query(
+        `SELECT orders.id AS "orderId", quantity, TO_CHAR("createdAt", 'YYYY-MM-DD HH:MM') AS "createdAt", "totalPrice", cakes.name AS "cakeName"
+        FROM orders
+        JOIN cakes ON orders."cakeId" = cakes.id
+        JOIN clients ON orders."clientId" = clients.id WHERE clients.id=$1`,
+        [id]
+    );
+}
